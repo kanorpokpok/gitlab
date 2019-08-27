@@ -1,24 +1,17 @@
 version: "3.6" 
 services:
   web:
-    image: 'gitlab/gitlab-ce'
-    container_name: 'gitlab'
+    image: 'gitlab/gitlab-ce:latest'
     restart: always
-    hostname: 192.168.31.246
+    hostname: 'gitlab.nipacloud'
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://192.168.31.246:9090'
+        external_url 'http://gitlab.nipacloud:8989'
         gitlab_rails['gitlab_shell_ssh_port'] = 2224
-    networks:
-      - gitlab-network
     ports:
-      - '9090:9090'
+      - '8989:8989'
       - '2224:22'
     volumes:
       - '/srv/gitlab/config:/etc/gitlab'
       - '/srv/gitlab/logs:/var/log/gitlab'
       - '/srv/gitlab/data:/var/opt/gitlab'
-
-networks:
-  gitlab-network:
-    name: gitlab-network
