@@ -1,16 +1,48 @@
-version: "3.5"
+# GitLab CE deployment using two external volumes; one for data and another
+# for configuration. These volumes needs to be created prior to starting GitLab
+# using the following commands:
+# docker volume create gitlab-data
+# docker volume create gitlab-config
+#
+# In addition you may want to change the hostname value in the Docker-Compose
+# configuration below to match the name of your server/computer on which
+# GitLab is to be run.
+#
+# Once started, access GitLab using the URL http://localhost:8880.
+#
+# The following ports are exposed by GitLab:
+# 8880 (HTTP)
+# 443 (if you configure HTTPS)
+# 8080 (used by Unicorn)
+# 8822 (used by the SSH daemon)
+#
+# The GitLab documentation suggests the following line to be added to the
+# GITLAB_OMNIBUS_CONFIG environment variable.
+# external_url 'http://hostname:8880'
+# However, with this line present I am unable to access the GitLab webpage.
+version: '3'
+
 services:
-    web:
-      image: 'gitlab/gitlab-ce:latest'
-      restart: always
-      hostname: 'gitlab.inovation.com'
-      environment:
-        GITLAB_OMNIBUS_CONFIG: |
-          external_url 'http://gitlab.inovation.com:8929'
-          # Add any other gitlab.rb configuration here, each on its own line
-      ports:
-        - '80:80'
-      volumes:
-        - '/srv/gitlab/config:/etc/gitlab'
-        - '/srv/gitlab/logs:/var/log/gitlab'
-        - '/srv/gitlab/data:/var/opt/gitlab'
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    hostname: hostname
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        gitlab_rails['gitlab_shell_ssh_port'] = 8822
+    ports:
+      - "443:443"
+      - "8880:80"
+      - "8822:22"
+# The logs directory can be mapped to the logs directory in the same director
+# as the docker-compose file using the following entry under volumes:
+# - ./logs:/var/log/gitlab
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-data:/var/opt/gitlab
+    restart: always
+
+volumes:
+  gitlab-data:
+    external: true
+  gitlab-config:
+    external: true
