@@ -6,7 +6,7 @@ services:
       hostname: 'gitlab.inovation.com'
       environment:
         GITLAB_OMNIBUS_CONFIG: |
-          external_url 'https://gitlab.inovation.com:8929'
+          external_url 'http://gitlab.inovation.com:8929'
           # Add any other gitlab.rb configuration here, each on its own line
       ports:
         - '8929:80'
