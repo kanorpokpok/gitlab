@@ -3,14 +3,12 @@ services:
   web:
     image: 'gitlab/gitlab-ce:latest'
     restart: always
-    hostname: 'gitlab.nipacloud'
+    hostname: '103.74.254.38'
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://gitlab.nipacloud:8989'
-        gitlab_rails['gitlab_shell_ssh_port'] = 2224
+        external_url 'http://103.74.254.38:8929'
     ports:
-      - '8989:8989'
-      - '2224:22'
+      - '8929:8929'      
     volumes:
       - '/srv/gitlab/config:/etc/gitlab'
       - '/srv/gitlab/logs:/var/log/gitlab'
